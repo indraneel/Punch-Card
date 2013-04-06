@@ -1,23 +1,18 @@
-# Import smtplib for the actual sending function
+#Sending an email through gmail using Python - Raghuram Reddy
 import smtplib
+fromaddr = 'robertf224@gmail.com'
+toaddrs = 'robertf224@gmail.com'
+msg = 'Hello Robert!'
 
-# Import the email modules we'll need
-from email.mime.text import MIMEText
+#provide gmail user name and password
+username = ''
+password = ''
 
-
-# Create a text/plain message
-msg = MIMEText('Hello Robert!') # this should actually have the content input from cards
-me = 'monkey@test.com'
-you = 'robertf224@gmail.com'
-
-# me == the sender's email address
-# you == the recipient's email address
-msg['Subject'] = 'Punch-Card Email!'
-msg['From'] = me
-msg['To'] = you
-
-# Send the message via our own SMTP server, but don't include the
-# envelope header.
-s = smtplib.SMTP('localhost')
-s.sendmail(me, [you], msg.as_string())
-s.quit()
+# functions to send an email
+server = smtplib.SMTP('smtp.gmail.com:587')
+server.ehlo()
+server.starttls()
+server.ehlo()
+server.login(username,password)
+server.sendmail(fromaddr, toaddrs, msg)
+server.quit()
