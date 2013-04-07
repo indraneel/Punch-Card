@@ -33,7 +33,7 @@ while 1:
 		input_value = gen_byte_from_array(bytes)
 		
 		# Determine the mode of operation
-		if output_mode = None:
+		if output_mode == None:
 		
 			# Enter Twitter mode
 			if input_value == 00:
