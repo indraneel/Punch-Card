@@ -8,7 +8,7 @@ TERMINATOR = 07		# Bell character is terminator character
 output_string = ""	# String data to output
 
 # Set up the output modes
-output_mode = None			# By default, value will just be printed to console
+output_mode = None
 MODE_TWITTER = 00			# Post a tweet to Twitter
 MODE_NYTIMES = 01			# Generate a telegram from a New York Times article
 MODE_TXTMSG = 02			# Send a text message
@@ -45,6 +45,11 @@ while 1:
 				output_mode = MODE_TXTMSG
 				print "Entering text message mode!"
 				continue
+				
+			# Exit the program
+			elif input_value == TERMINATOR:
+				print "Exiting program..."
+				sys.exit()
 				
 			# Error!
 			else:
