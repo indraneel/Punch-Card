@@ -15,4 +15,4 @@ while 1:
 			print output_string
 			output_string = ""
 			continue
-		output_string = output_string + input_value
+		output_string = output_string + chr(input_value)
