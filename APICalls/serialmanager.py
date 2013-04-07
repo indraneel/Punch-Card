@@ -2,6 +2,7 @@ import serial
 import util
 import sys
 import api_twitter
+import api_twilio
 
 # Set up serial port and initial values
 ser = serial.Serial('/dev/tty.usbserial', 9600)
@@ -59,6 +60,7 @@ while 1:
 			elif input_value == 03:
 				output_mode = MODE_TXTMSG
 				print "Entering text message mode!"
+				setup_twilio()
 				continue
 			
 			# Enter gmail mode
@@ -89,6 +91,8 @@ while 1:
 			# Perform some action based on the output mode
 			if output_mode == MODE_TWITTER:
 				post_tweet(output_string)
+			elif output_mode == MODE_TXTMSG:
+				send_text(output_string)
 			
 			# Reset the output string
 			output_string = ""
