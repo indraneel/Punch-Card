@@ -20,7 +20,7 @@
     </head>
     <body>
 	<div style='font-family: "Telegram HPLHS"'> </div>
-	<img id="telegram" src="./telegram.jpg" width="700" height="476" style="display:none" />
+	<!-- <img id="telegram" src="./telegram.jpg" width="700" height="476" style="display:none" /> -->
 	<canvas id="telegramcanvas"  width="700" height="476"></canvas>
 	<script src="./jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
@@ -50,14 +50,20 @@
 		console.log(20130407);
 		var canvas = document.getElementById("telegramcanvas");
 		var context = canvas.getContext("2d");
-		var telegram = document.getElementById("telegram");
-		context.drawImage(telegram,0,0);
-		context.font = '32px "Telegram HPLHS" serif';
-		context.textBaseline = "top";
-		//getStories();
-		context.fillText("A Secret Deal on Drones, Sealed in Blood", 58, 225);
-		context.fillText("OBAMA OBAMA OBAMA OBAMA", 58, 275);
-		context.fillText("Student run hackathon in new york city", 58, 325);
+		// var telegram = document.getElementById("telegram");
+		var telegram = new Image();
+
+      	telegram.onload = function() {
+	        context.drawImage(telegram, 69, 50);
+			context.drawImage(telegram,0,0);
+			context.font = '32px "Telegram HPLHS" serif';
+			context.textBaseline = "top";
+			//getStories();
+			context.fillText("A Secret Deal on Drones, Sealed in Blood", 58, 225);
+			context.fillText("OBAMA OBAMA OBAMA OBAMA", 58, 275);
+			context.fillText("Student run hackathon in new york city", 58, 325);
+      	};
+      	telegram.src = './telegram.jpg'
 	    });
 	</script>
     </body>
