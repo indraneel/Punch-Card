@@ -1,7 +1,8 @@
-#Sending an email through gmail using Python - Raghuram Reddy
+#Sending an email through gmail using Python
 import smtplib
-fromaddr = 'robertf224@gmail.com'
-toaddrs = 'robertf224@gmail.com'
+# fromaddr should be your gmail account, toaddrs can be anything
+fromaddr = ''
+toaddrs = ''
 msg = 'Hello Robert!'
 
 #provide gmail user name and password
