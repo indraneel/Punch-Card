@@ -7,7 +7,9 @@ import api_gmail
 import nytimes
 
 # Set up serial port and initial values
-#ser = serial.Serial('/dev/tty.usbserial', 9600)
+ser = serial.Serial(0, timeout=2)
+ser.setRTS(True)
+ser.setRTS(False)
 TERMINATOR = 07		# Bell character is terminator character
 output_string = ""	# String data to output
 
@@ -19,6 +21,7 @@ MODE_TXTMSG = 03			# Send a text message
 MODE_GMAIL = 04				# Send an email
 MODE_CONSOLE = 06			# Output text to console
 
+'''
 cnum = 0
 def nextBytes():
 	global cnum
@@ -30,6 +33,7 @@ def nextBytes():
 		return ['0', '0', '1', '0', '0', '0', '1', '0']
 	cnum = cnum + 1
 	return ['0', '0', '0', '0', '0', '1', '1', '1']
+'''
 
 # Convert a char to a digit
 def charToDigit(ch):
@@ -38,16 +42,16 @@ def charToDigit(ch):
 	return 0
 	
 # Read bytes from the serial port
-#while 1:
-for i in range(1, 4):
+while 1:
+#for i in range(1, 4):
 
 	# Check that eight bytes are prepared for input
-	#if ser.inWaiting() >= 8:
-	if True:
+	if ser.inWaiting() >= 8:
+	#if True:
 		
 		# Read in eight bytes from the serial port
-		#bytes = ser.read(8)
-		bytes = nextBytes()
+		bytes = ser.read(8)
+		#bytes = nextBytes()
 
 		# Convert chars '0' or '1' to 00 or 01
 		for i in range(len(bytes)):
