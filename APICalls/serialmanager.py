@@ -4,6 +4,7 @@ import sys
 import api_twitter
 import api_twilio
 import api_gmail
+import nytimes
 
 # Set up serial port and initial values
 #ser = serial.Serial('/dev/tty.usbserial', 9600)
@@ -23,7 +24,7 @@ def nextBytes():
 	global cnum
 	if cnum == 0:
 		cnum = cnum + 1
-		return ['0', '0', '0', '0', '0', '1', '1', '0']
+		return ['0', '0', '0', '0', '0', '0', '1', '0']
 	if cnum == 1:
 		cnum = cnum + 1
 		return ['0', '0', '1', '0', '0', '0', '1', '0']
@@ -122,6 +123,10 @@ for i in range(1, 4):
 				api_gmail.send_email(output_string)
 				api_gmail.end_gmail()
 				print "\nSending email!"
+			elif output_mode == MODE_NYTIMES:
+				d = nytimes.get_stories("google")
+				nytimes.generate_template(d)
+				print "\nGenerating telegram!"
 			
 			# Reset the output string
 			output_string = ""

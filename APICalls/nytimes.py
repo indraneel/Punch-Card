@@ -30,14 +30,16 @@ def generate_template(d):
     fo.close()
     out = open('../NYTelegram/output.html', 'wb+')
     out.write(n)
+    webbrowser.open_new('file:\\\\C:\Users\mattmik\Documents\HackNY\Punch-Card\NYTelegram\output.html')
     out.close()
+	
     # webbrowser.open('file:///Users/indraneelpurohit/Dropbox/Punch-Card/NYTelegram/output.html')
-    webbrowser.open('file:///Users/lavi/Documents/Git Repos/Punch-Card/NYTelegram/output.html')
+    #webbrowser.open_new_tab('file:///Users/lavi/Documents/Git Repos/Punch-Card/NYTelegram/output.html')
     #fo = open('layout.html', 'w+')
     #fo.write("<!DOCTYPE html>\n")
     #fo.write("<html>")
     #fo.write(pystache.render('Date {{date}}!', d))
     #fo.close();
 
-d = get_stories("google")
-generate_template(d)
+#d = get_stories("google")
+#generate_template(d)
