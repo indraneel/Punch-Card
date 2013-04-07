@@ -23,10 +23,17 @@
 unsigned int AMBIENT;
 unsigned int DARKNESS;
 int VALS[5];
+byte HALF_BYTE;
+boolean CARD_ON, HALF_BYTE_READ;
 
 void setup(void) {
   Serial.begin(9600);
   Serial.println("Loading...");
+  
+  // Init some constants yo
+  CARD_ON = true;
+  HALF_BYTE = 0;
+  HALF_BYTE_READ = false;
   
   // Take the average of the light and darkness readings
   unsigned int x = getReading(SPEC_N, SPEC_P);
@@ -48,7 +55,42 @@ void setup(void) {
 }
 
 void loop(void) {
-  for(int i = 1; i < 6; i++) {
+  Serial.println(getValue(1));
+  // TODO test this code!
+  if(!CARD_ON) {
+    CARD_ON = inputOn();
+    return;
+  }
+  // Here, card is ON.
+  boolean on = inputOn();
+  if(!HALF_BYTE_READ && on) {
+    // Reading the punch-card line
+    for(int i = 1; i < 6; i++) {
+      Serial.print(getValue(i));
+    }
+    Serial.print('\n');
+    HALF_BYTE++;
+    HALF_BYTE_READ = true; // Don't reread same line
+  }
+  else if(!on) {
+    HALF_BYTE_READ = false; // Read card on input light on
+  }
+  
+  // Test if the card has been fully read.
+  if(HALF_BYTE % 8 == 0) {
+    HALF_BYTE = 0;
+    CARD_ON = false;
+    delay(2000);
+  }
+  
+}
+
+/**
+ * Old loop code. Use this to test the input sensitivities of the
+ * LEDs and write them to Serial.
+ */
+void readerTest(void) {
+    for(int i = 1; i < 6; i++) {
     VALS[i - 1] = getReading(i * 2, (i * 2) + 1);
     Serial.print(VALS[i - 1]);
     Serial.print("|");
@@ -63,10 +105,9 @@ void loop(void) {
 }
 
 /**
- * @return True if we're going to stop reading input; false
- * otherwise.
+ * @return True if we're going to accept input; false otherwise.
  */
-boolean inputOff() {
+boolean inputOn(void) {
   return getValue(5) == '0';
 }
 
@@ -79,7 +120,7 @@ boolean inputOff() {
 char getValue(int row) {
   int pin = row * 2;
   unsigned int x = getReading(pin, pin + 1);
-  // TODO Refine the tolerance. Perhaps hardcode some values
+  // TODO Refine the tolerance before the demo.
   return ((x / DARKNESS) > TOLERANCE) ? '0' : '1';
 }
 
