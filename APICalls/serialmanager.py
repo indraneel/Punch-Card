@@ -22,6 +22,13 @@ while 1:
 		# Read in eight bytes from the serial port
 		bytes = read(8)
 		
+		# Convert chars '0' or '1' to 00 or 01
+		for i in range(len(bytes)):
+			if bytes[i] != '0' and bytes[i] != '1':
+				print "Invalid byte read from serial port: ", bytes[i], "!"
+				sys.exit()
+			bytes[i] = bytes[i] - '0'
+		
 		# Convert the eight 00 or 01 bytes to a number between 0 and 255
 		input_value = gen_byte_from_array(bytes)
 		
