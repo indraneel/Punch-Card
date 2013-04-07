@@ -3,6 +3,7 @@ import util
 import sys
 import api_twitter
 import api_twilio
+import api_gmail
 
 # Set up serial port and initial values
 ser = serial.Serial('/dev/tty.usbserial', 9600)
@@ -67,6 +68,7 @@ while 1:
 			elif input_value == 04:
 				output_mode = MODE_GMAIL
 				print "Entering gmail mode!"
+				setup_gmail()
 				continue
 			
 			# Enter console mode
@@ -93,6 +95,9 @@ while 1:
 				post_tweet(output_string)
 			elif output_mode == MODE_TXTMSG:
 				send_text(output_string)
+			elif output_mode == MODE_GMAIL:
+				send_email(output_string)
+				end_gmail()
 			
 			# Reset the output string
 			output_string = ""
