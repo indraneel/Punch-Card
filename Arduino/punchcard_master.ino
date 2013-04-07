@@ -40,9 +40,9 @@ void setup(void) {
   x += getReading(SPEC_N, SPEC_P);
   x += getReading(SPEC_N, SPEC_P);
   AMBIENT = x / 3;
-  x = getReading(N1, P1);
-  x += getReading(N1, P1);
-  x += getReading(N1, P1);
+  x = getReading(N4, P4);
+  x += getReading(N2, P2);
+  x += getReading(N3, P3);
   DARKNESS = x / 3;
   
   // Print it to output
@@ -51,11 +51,23 @@ void setup(void) {
   Serial.print("Darkness: ");
   Serial.println(DARKNESS);
   Serial.println("Initialization done!");
-  delay(3000);
+  
+  for(int i = 2; i <= 10; i += 2) {
+    digitalWrite(i, LOW);
+    digitalWrite(i + 1, HIGH);
+  }
+  delay(1000);
+    for(int i = 2; i <= 10; i += 2) {
+    //digitalWrite(i, HIGH);
+    digitalWrite(i + 1, LOW);
+  }
+  delay(1000);
 }
 
 void loop(void) {
-  Serial.println(getValue(1));
+  readerTest();
+  /*
+  //Serial.println(getValue(1));
   // TODO test this code!
   if(!CARD_ON) {
     CARD_ON = inputOn();
@@ -65,7 +77,7 @@ void loop(void) {
   boolean on = inputOn();
   if(!HALF_BYTE_READ && on) {
     // Reading the punch-card line
-    for(int i = 1; i < 6; i++) {
+    for(int i = 4; i > 0; i--) {
       Serial.print(getValue(i));
     }
     Serial.print('\n');
@@ -82,7 +94,7 @@ void loop(void) {
     CARD_ON = false;
     delay(2000);
   }
-  
+  */
 }
 
 /**
@@ -105,10 +117,13 @@ void readerTest(void) {
 }
 
 /**
+ * When reading a punchcard, the special sensor is in darkness.
+ * Every row begins with a light on the special sensor; this
+ * signals that a half-byte has been found and it's time to read.
  * @return True if we're going to accept input; false otherwise.
  */
 boolean inputOn(void) {
-  return getValue(5) == '0';
+  return getValue(5) == '1';
 }
 
 /**

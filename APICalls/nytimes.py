@@ -2,6 +2,7 @@ import httplib
 import simplejson as json
 import pystache 
 import webbrowser
+import unicodedata
 
 def get_stories(input):
     query = input 
@@ -9,8 +10,19 @@ def get_stories(input):
     url = "/svc/search/v1/article?query=" + query + "&api-key=ddabadc6f489ae99ad087f1892088d43:7:67526141"
     conn.request("GET", url)
     r = conn.getresponse()
-    data = r.read()
-    return json.loads(data)
+    data = json.loads(r.read())
+    # keys = ['tit{}'.format(i) for i in range(0,3)]
+    # titles = []
+    # for i in range(0,3):
+    #     tit = data['results'][i]['title']
+    #     if (not isinstance(tit, str)):
+    #         tit = unicodedata.normalize('NFKD', tit).encode('ascii','ignore')
+    #     titles.append(tit)
+    # titles = data['results'][i]['title'] for i in range(0,3)
+    # d = dict(zip(keys, titles))
+    # print d
+
+    return {'body': data['results'][0]['body']}
 
 def generate_template(d):
     fo = open('../NYTelegram/index.html', 'rb')
@@ -27,5 +39,5 @@ def generate_template(d):
     #fo.write(pystache.render('Date {{date}}!', d))
     #fo.close();
 
-d = get_stories("north%20korea")
-generate_template(d['results'][0])
+d = get_stories("google")
+generate_template(d)

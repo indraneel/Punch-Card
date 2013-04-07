@@ -47,7 +47,7 @@
 		    });
 		}
 		 */
-		console.log(20130407);
+		console.log();
 		var canvas = document.getElementById("telegramcanvas");
 		var context = canvas.getContext("2d");
 		// var telegram = document.getElementById("telegram");
@@ -56,12 +56,44 @@
       	telegram.onload = function() {
 	        context.drawImage(telegram, 69, 50);
 			context.drawImage(telegram,0,0);
-			context.font = '32px "Telegram HPLHS" serif';
 			context.textBaseline = "top";
 			//getStories();
-			context.fillText("A Secret Deal on Drones, Sealed in Blood", 58, 225);
-			context.fillText("OBAMA OBAMA OBAMA OBAMA", 58, 275);
-			context.fillText("Student run hackathon in new york city", 58, 325);
+			// context.fillText("A Secret Deal on Drones, Sealed in Blood", 58, 225);
+			// tit0 = ""
+			// if (tit0.length > 31) {
+			// 	tit0 = tit0.substring(0,27)+ "STOP"
+			// }
+			// tit1 = ""
+			// if (tit1.length > 31) {
+			// 	tit1 = tit1.substring(0,27)+ "STOP"
+			// }
+			// tit2 = ""
+			// if (tit2.length > 31) {
+			// 	tit2 = tit2.substring(0,27)+ "STOP"
+			// }
+			body = 'WHEN Yahoo banned its employees from working from home in February, the reasons it gave had less to do with productivity than serendipity. &amp;ldquo;Some of the best decisions and insights come from hallway and cafeteria discussions, meeting new people, and impromptu team meetings,&amp;rdquo; explained the accompanying memo . The message was clear: doing'
+			body = body.split('.')[0]
+			if (body.length > 31) {
+				body1 = body.substring(0,31)
+				body2 = body.substring(31, body.length)
+			}
+
+			body2 = body2.trim()
+			len2 = body2.length
+			if (len2 > 31) {
+				body3 = body2.substring(31, len2)
+				body2 = body2.substring(0,31)
+			}
+			if (body3.length > 31) {
+				body3 = body3.substring(0,28) + "..."
+			}
+
+			context.font = '64px "Courier" mono';
+			context.fillText("TELEGRAM", 210, 115)
+			context.font = '32px "Courier" mono';
+			context.fillText(body1, 58, 225);
+			context.fillText(body2, 58, 275);
+			context.fillText(body3, 58, 325);
       	};
       	telegram.src = './telegram.jpg'
 	    });
