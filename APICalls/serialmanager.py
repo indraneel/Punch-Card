@@ -6,7 +6,7 @@ import api_twilio
 import api_gmail
 
 # Set up serial port and initial values
-ser = serial.Serial('/dev/tty.usbserial', 9600)
+#ser = serial.Serial('/dev/tty.usbserial', 9600)
 TERMINATOR = 07		# Bell character is terminator character
 output_string = ""	# String data to output
 
@@ -18,24 +18,45 @@ MODE_TXTMSG = 03			# Send a text message
 MODE_GMAIL = 04				# Send an email
 MODE_CONSOLE = 06			# Output text to console
 
+cnum = 0
+def nextBytes():
+	global cnum
+	if cnum == 0:
+		cnum = cnum + 1
+		return ['0', '0', '0', '0', '0', '1', '1', '0']
+	if cnum == 1:
+		cnum = cnum + 1
+		return ['0', '0', '1', '0', '0', '0', '1', '0']
+	cnum = cnum + 1
+	return ['0', '0', '0', '0', '0', '1', '1', '1']
+
+# Convert a char to a digit
+def charToDigit(ch):
+	if ch == '1':
+		return 1
+	return 0
+	
 # Read bytes from the serial port
-while 1:
+#while 1:
+for i in range(1, 4):
 
 	# Check that eight bytes are prepared for input
-	if ser.inWaiting() >= 8:
+	#if ser.inWaiting() >= 8:
+	if True:
 		
 		# Read in eight bytes from the serial port
-		bytes = read(8)
+		#bytes = ser.read(8)
+		bytes = nextBytes()
 
 		# Convert chars '0' or '1' to 00 or 01
 		for i in range(len(bytes)):
 			if bytes[i] != '0' and bytes[i] != '1':
 				print "Invalid byte read from serial port: ", bytes[i], "!"
 				sys.exit()
-			bytes[i] = bytes[i] - '0'
+			bytes[i] = charToDigit(bytes[i])
 		
 		# Convert the eight 00 or 01 bytes to a number between 0 and 255
-		input_value = gen_byte_from_array(bytes)
+		input_value = util.gen_byte_from_array(bytes)
 		
 		# Skip the null character
 		if input_value == 00:
@@ -48,7 +69,7 @@ while 1:
 			if input_value == 01:
 				output_mode = MODE_TWITTER
 				print "Entering Twitter mode!"
-				setup_twitter()
+				api_twitter.setup_twitter()
 				continue
 				
 			# Enter New York Times mode
@@ -61,14 +82,14 @@ while 1:
 			elif input_value == 03:
 				output_mode = MODE_TXTMSG
 				print "Entering text message mode!"
-				setup_twilio()
+				api_twilio.setup_twilio()
 				continue
 			
 			# Enter gmail mode
 			elif input_value == 04:
 				output_mode = MODE_GMAIL
 				print "Entering gmail mode!"
-				setup_gmail()
+				api_gmail.setup_gmail()
 				continue
 			
 			# Enter console mode
@@ -92,12 +113,15 @@ while 1:
 		
 			# Perform some action based on the output mode
 			if output_mode == MODE_TWITTER:
-				post_tweet(output_string)
+				api_twitter.post_tweet(output_string)
+				print "\nPosting tweet!"
 			elif output_mode == MODE_TXTMSG:
-				send_text(output_string)
+				api_twilio.send_text(output_string)
+				print "\nSending text message!"
 			elif output_mode == MODE_GMAIL:
-				send_email(output_string)
-				end_gmail()
+				api_gmail.send_email(output_string)
+				api_gmail.end_gmail()
+				print "\nSending email!"
 			
 			# Reset the output string
 			output_string = ""
