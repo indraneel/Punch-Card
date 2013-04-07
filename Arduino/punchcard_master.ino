@@ -2,8 +2,8 @@
  * Uses LED lights to detect visible light.
  */
 
-#define TOLERANCE 0.85
-#define MAX 25000
+#define TOLERANCE 0.6
+#define MAX 31000
 
 #define N1 2
 #define P1 3
@@ -22,6 +22,7 @@
 
 unsigned int AMBIENT;
 unsigned int DARKNESS;
+int VALS[5];
 
 void setup(void) {
   Serial.begin(9600);
@@ -48,12 +49,13 @@ void setup(void) {
 
 void loop(void) {
   for(int i = 1; i < 6; i++) {
-    Serial.print(getReading(i * 2, (i * 2) + 1));
+    VALS[i - 1] = getReading(i * 2, (i * 2) + 1);
+    Serial.print(VALS[i - 1]);
     Serial.print("|");
   }
   Serial.println("");
   for(int i = 1; i < 6; i++) {
-    Serial.print(getValue(i));
+    Serial.print(getValueFromUInt(VALS[i - 1]));
     Serial.print("|");
   }
   Serial.println("\n");
@@ -65,7 +67,7 @@ void loop(void) {
  * otherwise.
  */
 boolean inputOff() {
-  // TODO
+  return getValue(5) == '0';
 }
 
 /**
@@ -79,6 +81,16 @@ char getValue(int row) {
   unsigned int x = getReading(pin, pin + 1);
   // TODO Refine the tolerance. Perhaps hardcode some values
   return ((x / DARKNESS) > TOLERANCE) ? '0' : '1';
+}
+
+/**
+ * Determines whether or not the input value corresponds to light
+ * or darkness.
+ * @param val The light reading.
+ * @return '0' if it is darkness; '1' if it is light.
+ */
+char getValueFromUInt(unsigned int val) {
+  return ((val / DARKNESS) > TOLERANCE) ? '0' : '1';
 }
 
 /**
